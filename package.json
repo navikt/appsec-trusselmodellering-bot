@@ -1,0 +1,29 @@
+{
+  "name": "pentest-order-slack-app",
+  "version": "1.0.0",
+  "description": "Slack app for managing pentest orders with approval workflow",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js"
+  },
+  "keywords": [
+    "slack",
+    "bolt",
+    "pentest",
+    "workflow"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@slack/bolt": "^4.5.0",
+    "@slack/socket-mode": "^2.0.5",
+    "dotenv": "^16.4.5",
+    "finity": "^0.5.4",
+    "pg": "^8.16.3",
+    "ws": "^8.18.3"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
+}

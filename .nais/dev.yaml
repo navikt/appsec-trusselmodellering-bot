@@ -1,0 +1,37 @@
+---
+apiVersion: nais.io/v1alpha1
+kind: Application
+metadata:
+  labels:
+    team: saape-nais
+  name: saape-pentest-slackbot
+  namespace: saape-nais
+spec:
+  image: {{ image }}
+  port: 3000
+  replicas:
+    min: 1
+    max: 1
+  liveness:
+    path: /internal/is_alive
+  readiness:
+    path: /internal/is_alive
+  resources:
+    limits:
+      memory: 512Mi
+    requests:
+      cpu: 10m
+      memory: 128Mi
+  ingresses:
+    - https://saape-pentest-slackbot.ekstern.dev.nav.no
+  accessPolicy:
+    outbound:
+      external:
+        - host: slack.com
+        - host: api.slack.com
+        - host: wss-primary.slack.com
+  env:
+    - name: PORT
+      value: "8080"
+  envFrom:
+    - secret: saape-pentest-slackbot-secrets
