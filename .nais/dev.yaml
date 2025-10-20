@@ -32,6 +32,6 @@ spec:
         - host: wss-primary.slack.com
   env:
     - name: PORT
-      value: "8080"
+      value: "3000"
   envFrom:
     - secret: saape-pentest-slackbot-secrets
