@@ -20,22 +20,22 @@ const getPentestRequestModal = () => ({
         type: 'mrkdwn',
         text: `*Bestill en pentest eller start en dialog*
 
-Dette skjemaet er den raskeste veien for å komme i gang med en sikkerhetstest. Det er helt uforpliktende og ment for å melde interesse – du trenger **ikke** ha alle svarene klare nå.
+Dette skjemaet er den raskeste veien for å komme i gang med en sikkerhetstest. Det er helt uforpliktende og ment for å melde interesse - du trenger *ikke* ha alle svarene klare nå.
 
-**Hva skjer etter at du sender inn?**
+*Hva skjer etter at du sender inn?*
 1.  Vi mottar forespørselen og oppretter en privat Slack-kanal og en Jira-sak.
 2.  Du og teamet ditt blir invitert, sammen med sikkerhetsteamet.
 3.  I kanalen avklarer vi scope, finner riktig tidspunkt og planlegger testen sammen.
 
-**For å gjøre prosessen smidigere, tenk gjerne gjennom:**
-*   **Hva skal testes?** (F.eks. en nettside, et API, en app)
-*   **Tilganger:** Trenger vi testbrukere eller spesielle tilganger? (Ikke del passord her!)
-*   **Miljø:** Finnes det et eget testmiljø vi kan bruke?
-*   **Team:** Hvem fra ditt team bør være involvert?
+*For å gjøre prosessen smidigere, tenk gjerne gjennom:*
+*   *Hva skal testes?* (F.eks. en nettside, et API, en app)
+*   *Tilganger:* Trenger vi testbrukere eller spesielle tilganger? (Ikke del passord her!)
+*   *Miljø:* Finnes det et eget testmiljø vi kan bruke?
+*   *Team:* Hvem fra ditt team bør være involvert?
 
-Jo mer informasjon du gir oss nå, jo raskere kan vi hjelpe deg. Men det viktigste er at du melder fra – så tar vi resten av dialogen i etterkant.
+Jo mer informasjon du gir oss nå, jo raskere kan vi hjelpe deg. Men det viktigste er at du melder fra - så tar vi resten av dialogen i etterkant.
 
-**Viktig:** Ikke skriv sensitiv informasjon som passord, personopplysninger eller forretningshemmeligheter i dette skjemaet.`
+*Viktig:* Ikke skriv sensitiv informasjon som passord, personopplysninger eller forretningshemmeligheter i dette skjemaet.`
       }
     },
     {
@@ -109,8 +109,8 @@ Jo mer informasjon du gir oss nå, jo raskere kan vi hjelpe deg. Men det viktigs
         },
         options: [
           { text: { type: 'plain_text', text: 'Kritisk (innen 1 uke)' }, value: 'critical' },
-          { text: { type: 'plain_text', text: 'Høy (1–2 uker)' }, value: 'high' },
-          { text: { type: 'plain_text', text: 'Normal (2–4 uker)' }, value: 'medium' },
+          { text: { type: 'plain_text', text: 'Høy (1-2 uker)' }, value: 'high' },
+          { text: { type: 'plain_text', text: 'Normal (2-4 uker)' }, value: 'medium' },
           { text: { type: 'plain_text', text: 'Lav (4+ uker eller fleksibelt)' }, value: 'low' },
           { text: { type: 'plain_text', text: 'Usikker enda' }, value: 'unknown' }
         ]
