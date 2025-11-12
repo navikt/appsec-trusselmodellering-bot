@@ -48,23 +48,7 @@ const validateChannelId = (channelId, fieldName = 'channelId') => {
   return channelId;
 };
 
-/**
- * Validates a Slack timestamp format
- * @param {string} timestamp - The timestamp to validate
- * @param {string} fieldName - Name of the field for error context
- * @throws {ValidationError} If timestamp is invalid
- */
-const validateSlackTimestamp = (timestamp, fieldName = 'timestamp') => {
-  if (!timestamp || typeof timestamp !== 'string') {
-    throw new ValidationError(`${fieldName} must be a non-empty string`, fieldName, timestamp);
-  }
-  
-  if (!/^\d{10}\.\d{6}$/.test(timestamp)) {
-    throw new ValidationError(`${fieldName} must be a valid Slack timestamp format`, fieldName, timestamp);
-  }
-  
-  return timestamp;
-};
+
 
 /**
  * Validates an array of user IDs
@@ -101,7 +85,7 @@ const validateUserIdArray = (userIds, fieldName = 'userIds', allowEmpty = false)
 };
 
 /**
- * Validates request data object structure and required fields
+ * Validates basic request data for threat modeling
  * @param {Object} requestData - The request data to validate
  * @throws {ValidationError} If request data is invalid
  */
@@ -111,11 +95,6 @@ const validateRequestData = (requestData) => {
   }
   
   const requiredFields = ['projectName', 'requestedBy'];
-  const optionalFields = [
-    'targetScope', 'pentestTypeText', 'urgencyText', 'teamMembers', 
-    'additionalInfo', 'fullReport', 'status', 'adminMessageTs', 
-    'channelId', 'assignedTo'
-  ];
   
   requiredFields.forEach(field => {
     if (!requestData[field] || typeof requestData[field] !== 'string') {
@@ -133,53 +112,10 @@ const validateRequestData = (requestData) => {
     validateUserIdArray(requestData.teamMembers, 'teamMembers', true);
   }
   
-  if (requestData.assignedTo) {
-    validateUserIdArray(requestData.assignedTo, 'assignedTo', true);
-  }
-  
-  if (requestData.adminMessageTs) {
-    validateSlackTimestamp(requestData.adminMessageTs, 'adminMessageTs');
-  }
-  
-  if (requestData.channelId) {
-    validateChannelId(requestData.channelId, 'channelId');
-  }
-  
-  const allValidFields = [...requiredFields, ...optionalFields];
-  const unexpectedFields = Object.keys(requestData).filter(
-    field => !allValidFields.includes(field)
-  );
-  
-  if (unexpectedFields.length > 0) {
-    logger.warn('Request data contains unexpected fields', { 
-      unexpectedFields, 
-      requestId: requestData.requestId 
-    });
-  }
-  
   return requestData;
 };
 
-/**
- * Validates a request ID format
- * @param {string} requestId - The request ID to validate
- * @throws {ValidationError} If request ID is invalid
- */
-const validateRequestId = (requestId) => {
-  if (!requestId || typeof requestId !== 'string') {
-    throw new ValidationError('Request ID must be a non-empty string', 'requestId', requestId);
-  }
-  
-  if (requestId.length < 3 || requestId.length > 50) {
-    throw new ValidationError(
-      'Request ID must be between 3 and 50 characters', 
-      'requestId', 
-      requestId
-    );
-  }
-  
-  return requestId;
-};
+
 
 /**
  * Safe wrapper for validation functions that logs errors
@@ -227,10 +163,8 @@ module.exports = {
   ValidationError,
   validateUserId,
   validateChannelId,
-  validateSlackTimestamp,
   validateUserIdArray,
   validateRequestData,
-  validateRequestId,
   safeValidate,
   sanitizeProjectName
 };

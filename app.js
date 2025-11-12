@@ -5,7 +5,7 @@ const store = require('./src/store');
 const ApplicationFactory = require('./src/factories/applicationFactory');
 const logger = require('./src/logger');
 const { buildAppHomeView } = require('./src/messages');
-const { getPentestRequestModal } = require('./src/modals');
+const { getThreatModelingRequestModal } = require('./src/modals');
 
 const app = new App({
   ...config.slackApp,
@@ -27,9 +27,7 @@ const app = new App({
   ]
 });
 
-const { listsManager, actionHandlers } = ApplicationFactory.createApplication(app);
-
-app.listsManager = listsManager;
+const { actionHandlers } = ApplicationFactory.createApplication(app);
 
 require('./src/handlers/commands')(app, config);
 actionHandlers.register();
@@ -44,39 +42,32 @@ app.event('app_home_opened', async ({ event, client, logger: boltLogger }) => {
   }
 });
 
-app.action('request_pentest', async ({ ack, body, client }) => {
+app.action('request_threatmodeling', async ({ ack, body, client }) => {
   await ack();
   try {
     await client.views.open({
       trigger_id: body.trigger_id,
-      view: getPentestRequestModal()
+      view: getThreatModelingRequestModal()
     });
   } catch (error) {
-    logger.error('Error opening pentest modal from App Home:', error);
+    logger.error('Error opening threat modeling modal from App Home:', error);
   }
 });
 
 (async () => {
   try {
-    const listId = await listsManager.initializeList();
+    // Initialize simplified threat modeling store
+    await store.connect();
     
-    await store.connect(listsManager, app.client);
-    
-    if (listId) {
-      const healthy = await store.healthCheck();
-      if (!healthy) {
-        console.error('Slack Store health check failed. Exiting...');
-        process.exit(1);
-      }
+    const healthy = await store.healthCheck();
+    if (!healthy) {
+      console.error('Threat Modeling Store health check failed. Exiting...');
+      process.exit(1);
     }
 
     await app.start(config.port);
     
-    if (listId) {
-      console.log('⚡️ Slack app is running!');
-    } else {
-      console.log('⚡️ Slack app is running! Waiting for list creation...');
-    }
+    console.log('⚡️ Threat Modeling Slack app is running!');
 
     const shutdown = async (signal) => {
       console.log(`\n${signal} received, shutting down gracefully...`);
@@ -88,7 +79,7 @@ app.action('request_pentest', async ({ ack, body, client }) => {
     process.on('SIGINT', () => shutdown('SIGINT'));
 
   } catch (error) {
-    console.error('Failed to start app:', error);
+    console.error('Failed to start threat modeling app:', error);
     process.exit(1);
   }
 })();
