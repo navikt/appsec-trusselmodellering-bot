@@ -12,17 +12,29 @@ const buildThreatModelingNotificationMessage = (requestId, user, requestData, tr
     {
       type: 'section', fields: [
         { type: 'mrkdwn', text: `*System/applikasjon:*\n${requestData.projectName || 'Uten navn'}` },
-        { type: 'mrkdwn', text: `*Team:*\n${requestData.teamName || 'Ikke oppgitt'}` },
-        { type: 'mrkdwn', text: `*Formål:*\n${requestData.threatModelingReasonText || 'Ikke oppgitt'}` }
+        { type: 'mrkdwn', text: `*Team:*\n${requestData.teamName || 'Ikke oppgitt'}` }
       ]
     },
     { type: 'section', text: { type: 'mrkdwn', text: `*Systembeskrivelse:*\n${requestData.systemDescription || 'Ikke oppgitt'}` } },
-    { type: 'section', text: { type: 'mrkdwn', text: `*Ønsket tidsperiode:*\n${requestData.preferredTimeframe || 'Ikke oppgitt'}` } },
-    { type: 'section', text: { type: 'mrkdwn', text: `*Tilleggsinformasjon:*\n${requestData.additionalInfo || 'Ingen'}` } },
+    { type: 'section', text: { type: 'mrkdwn', text: `*Formål med trusselmodellering:*\n${requestData.threatModelingReasonText || 'Ikke oppgitt'}` } },
+    ...(requestData.preferredTimeframe ? [
+      { type: 'section', text: { type: 'mrkdwn', text: `*Ønsket tidsperiode:*\n${requestData.preferredTimeframe}` } }
+    ] : []),
     ...(trelloUrl ? [
       { type: 'divider' },
       { type: 'section', text: { type: 'mrkdwn', text: `*Trello-kort:*\n<${trelloUrl}|Se Trello-kort for oppfølging>` } }
-    ] : [])
+    ] : []),
+    { type: 'divider' },
+    {
+      type: 'context',
+      elements: [{
+        type: 'mrkdwn',
+        text: `Opprettet: ${new Date(requestData.requestedAt || Date.now()).toLocaleString('no-NO', { 
+          year: 'numeric', month: '2-digit', day: '2-digit', 
+          hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Oslo' 
+        })}`
+      }]
+    }
   ]
 });
 

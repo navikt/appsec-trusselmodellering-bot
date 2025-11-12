@@ -12,7 +12,7 @@ const MODAL_FIELDS = Object.freeze({
   TEAM_NAME: 'team_name', 
   SYSTEM_DESCRIPTION: 'system_description',
   THREAT_MODELING_REASON: 'threat_modeling_reason',
-  PREFERRED_TIMEFRAME: 'preferred_timeframe', 
+  PREFERRED_TIMEFRAME: 'preferred_timeframe',
 });
 
 // Modal callback identifiers

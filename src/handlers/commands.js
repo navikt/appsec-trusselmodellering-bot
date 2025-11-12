@@ -1,6 +1,7 @@
 const logger = require('../logger');
 const { getThreatModelingRequestModal } = require('../modals');
 const { buildThreatModelingNotificationMessage } = require('../messages');
+const { getThreatModelingReasonLabel } = require('../constants/lists');
 
 module.exports = function registerCommands(app, config = {}) {
   const notificationChannelId = config.notificationChannelId || process.env.NOTIFICATION_CHANNEL_ID;
@@ -37,26 +38,22 @@ module.exports = function registerCommands(app, config = {}) {
     const user = body.user;
 
     const projectName = values?.project_name?.project_name_input?.value?.trim() || 'Uten navn';
+    const teamName = values?.team_name?.team_name_input?.value?.trim() || 'Ikke oppgitt';
     const systemDescription = values?.system_description?.system_description_input?.value?.trim() || 'Ikke oppgitt';
-    const threatModelingType = values?.threatmodeling_type?.threatmodeling_type_select?.selected_option?.value || 'other';
-    const threatModelingTypeText = values?.threatmodeling_type?.threatmodeling_type_select?.selected_option?.text?.text || 'Ikke oppgitt';
-    const priority = values?.priority?.priority_select?.selected_option?.value || 'medium';
-    const priorityText = values?.priority?.priority_select?.selected_option?.text?.text || 'Middels';
-    const teamMembers = values?.team_members?.team_members_select?.selected_users || [];
-    const additionalInfo = values?.additional_info?.additional_info_input?.value?.trim() || 'Ingen tilleggsinformasjon oppgitt.';
+    const threatModelingReason = values?.threat_modeling_reason?.threat_modeling_reason_select?.selected_option?.value || 'standalone';
+    const threatModelingReasonText = values?.threat_modeling_reason?.threat_modeling_reason_select?.selected_option?.text?.text || getThreatModelingReasonLabel(threatModelingReason);
+    const preferredTimeframe = values?.preferred_timeframe?.preferred_timeframe_input?.value?.trim() || null;
 
     const requestId = `TM-${Date.now()}`;
     logger.info(`New threat modeling request initiated: ${requestId} by ${user.id}`);
 
     const requestData = {
       projectName,
+      teamName,
       systemDescription,
-      threatModelingType,
-      threatModelingTypeText,
-      priority,
-      priorityText,
-      teamMembers,
-      additionalInfo,
+      threatModelingReason,
+      threatModelingReasonText,
+      preferredTimeframe,
       requestedBy: user.id,
       requestedAt: new Date().toISOString(),
       status: 'processed'
