@@ -49,32 +49,24 @@ class SlackListsManager {
   /**
    * Creates a new SlackListsManager instance
    * @param {Object} client - Slack client for API calls
-   * @param {string} adminChannelId - Admin channel ID for notifications
+   * @param {string} notificationChannelId - Notification channel ID for notifications
    * @param {string|null} initialListId - Existing list ID if available
-   * @param {Array<string>} adminUserIds - Array of admin user IDs
    * @param {Object} dependencies - Dependency injection for testing
    * @param {Object} dependencies.logger - Logger instance
    * @param {Object} dependencies.errorHandler - Error handler instance
    * @throws {ConfigurationError} When required parameters are missing or invalid
    */
-  constructor(client, adminChannelId, initialListId = null, adminUserIds = [], dependencies = {}) {
+  constructor(client, notificationChannelId, initialListId = null, dependencies = {}) {
     if (!client) {
       throw new ConfigurationError('Slack client is required');
     }
 
-    if (adminChannelId) {
-      validateChannelId(adminChannelId, 'adminChannelId');
-    }
-
-    if (adminUserIds && adminUserIds.length > 0) {
-      adminUserIds.forEach((userId, index) => {
-        validateUserId(userId, `adminUserIds[${index}]`);
-      });
+    if (notificationChannelId) {
+      validateChannelId(notificationChannelId, 'notificationChannelId');
     }
 
     this.client = client;
-    this.adminChannelId = adminChannelId;
-    this.adminUserIds = Array.isArray(adminUserIds) ? adminUserIds : [];
+    this.notificationChannelId = notificationChannelId;
     this.listId = initialListId || null;
 
     this.logger = dependencies.logger || logger;
@@ -150,7 +142,7 @@ class SlackListsManager {
   async sendCreateListMessage() {
     try {
       await this.client.chat.postMessage({
-        channel: this.adminChannelId,
+        channel: this.notificationChannelId,
         text: '📋 Pentest-bestillinger liste må opprettes',
         blocks: [
           {
@@ -192,7 +184,7 @@ class SlackListsManager {
           }
         ]
       });
-      logger.success('Create list message sent to admin channel');
+      logger.success('Create list message sent to notification channel');
     } catch (error) {
       logger.error('Error sending create list message:', error);
     }
@@ -206,7 +198,7 @@ class SlackListsManager {
       await this.shareListAccess();
 
       await this.client.chat.postMessage({
-        channel: this.adminChannelId,
+        channel: this.notificationChannelId,
         text: '✅ Pentest-bestillinger liste opprettet!',
         blocks: [
           {
@@ -221,7 +213,7 @@ class SlackListsManager {
             type: 'section',
             text: {
               type: 'mrkdwn',
-              text: '*Pentest-bestillinger* listen er nå klar! 🎉\n\nListen er delt med denne kanalen og alle admins.'
+              text: '*Pentest-bestillinger* listen er nå klar! 🎉\n\nListen er delt med denne kanalen.'
             }
           },
           {
@@ -262,7 +254,7 @@ class SlackListsManager {
     } catch (error) {
       logger.error('Error creating list:', error);
       await this.client.chat.postMessage({
-        channel: this.adminChannelId,
+        channel: this.notificationChannelId,
         text: '❌ Feil ved oppretting av liste',
         blocks: [
           {
@@ -288,7 +280,7 @@ class SlackListsManager {
 
     const result = await this.apiService.createList({
       name: LIST_NAME,
-      channel_id: this.adminChannelId,
+      channel_id: this.notificationChannelId,
       schema: LIST_SCHEMA
     });
 
@@ -468,35 +460,22 @@ class SlackListsManager {
       return;
     }
 
-    logger.info('Sharing list with admin channel and users');
+    logger.info('Sharing list with notification channel and users');
 
     try {
       await this.callSlackApi('slackLists.access.set', {
         list_id: this.listId,
-        channel_ids: [this.adminChannelId],
+        channel_ids: [this.notificationChannelId],
         access_level: 'write'
       });
-      logger.success(`List shared with channel ${this.adminChannelId}`);
+      logger.success(`List shared with channel ${this.notificationChannelId}`);
     } catch (error) {
       logger.error('Unable to share list with channel', { error: error.message });
     }
 
-    for (const userId of this.adminUserIds) {
-      try {
-        await this.callSlackApi('slackLists.access.set', {
-          list_id: this.listId,
-          user_ids: [userId],
-          access_level: 'write'
-        });
-        logger.success(`List shared with admin user ${userId}`);
-      } catch (error) {
-        logger.error(`Unable to share list with user ${userId}`, { error: error.message });
-      }
-    }
-
     try {
       await this.client.chat.postMessage({
-        channel: this.adminChannelId,
+        channel: this.notificationChannelId,
         text: '📋 Pentest-bestillinger',
         blocks: [
           {
@@ -518,13 +497,13 @@ class SlackListsManager {
             elements: [
               {
                 type: 'mrkdwn',
-                text: `Liste-ID: \`${this.listId}\` | Delt med denne kanalen og ${this.adminUserIds.length} admin(s)`
+                text: `Liste-ID: \`${this.listId}\` | Delt med denne kanalen`
               }
             ]
           }
         ]
       });
-      logger.success('List share notification posted to admin channel');
+      logger.success('List share notification posted to notification channel');
     } catch (error) {
       logger.error('Failed to post share notification', { error: error.message });
     }
