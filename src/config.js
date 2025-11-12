@@ -16,14 +16,6 @@ if (missing.length > 0) {
 	throw new Error(`Missing required environment variables: ${missing.join(', ')}`);
 }
 
-const parseCsv = (value) =>
-	value
-		? value
-				.split(',')
-				.map((entry) => entry.trim())
-				.filter(Boolean)
-		: [];
-
 const parsePort = (value, fallback = 3000) => {
 	const parsed = Number.parseInt(value, 10);
 	return Number.isInteger(parsed) && parsed > 0 ? parsed : fallback;
@@ -32,7 +24,6 @@ const parsePort = (value, fallback = 3000) => {
 const config = {
 	port: parsePort(process.env.PORT),
 	notificationChannelId: process.env.NOTIFICATION_CHANNEL_ID,
-	orderListId: process.env.ORDER_LIST_ID || null,
 	slackApp: {
 		token: process.env.SLACK_BOT_TOKEN,
 		signingSecret: process.env.SIGNING_SECRET,

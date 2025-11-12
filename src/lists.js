@@ -38,7 +38,7 @@ const COLUMN_PROPERTY_MAP = Object.freeze({
   urgency: 'urgencyColumnId',
   assignedTo: 'assignedToColumnId',
   requestedBy: 'requestedByColumnId',
-  pentestType: 'pentestTypeColumnId',
+  threatModelingType: 'threatModelingTypeColumnId',
   adminMessageTs: 'adminMessageTsColumnId'
 });
 
@@ -87,7 +87,7 @@ class SlackListsManager {
       urgency: null,
       assignedTo: null,
       requestedBy: null,
-      pentestType: null,
+      threatModelingType: null,
       adminMessageTs: null
     };
 
@@ -113,18 +113,18 @@ class SlackListsManager {
   }
 
   /**
-   * Initialize the Slack List for pentest requests
-   * Either loads an existing list or prompts admin to create one
+   * Initialize the Slack List for threat modeling requests
+   * Either loads an existing list or prompts to create one
    * @returns {Promise<string|null>} List ID if ready, null if waiting for creation
    * @throws {SlackAPIError} When API calls fail
    * @throws {ConfigurationError} When configuration is invalid
    */
   async initializeList() {
     try {
-      this.logger.info('Initializing Pentest Orders List...');
+      this.logger.info('Initializing Threat Modeling Requests List...');
 
       if (!this.listId) {
-        this.logger.warn('No ORDER_LIST_ID found - waiting for admin to create list...');
+        this.logger.warn('No THREAT_MODELING_LIST_ID found - waiting to create list...');
         await this.sendCreateListMessage();
         return null;
       }
@@ -143,13 +143,13 @@ class SlackListsManager {
     try {
       await this.client.chat.postMessage({
         channel: this.notificationChannelId,
-        text: '📋 Pentest-bestillinger liste må opprettes',
+        text: '📋 Trusselmodellering-bestillinger liste må opprettes',
         blocks: [
           {
             type: 'header',
             text: {
               type: 'plain_text',
-              text: '📋 Opprett Pentest-bestillinger liste',
+              text: '📋 Opprett Trusselmodellering-bestillinger liste',
               emoji: true
             }
           },
@@ -157,14 +157,14 @@ class SlackListsManager {
             type: 'section',
             text: {
               type: 'mrkdwn',
-              text: '*Pentest-bestillinger listen er ikke konfigurert ennå.*\n\nTrykk på knappen nedenfor for å opprette en ny liste som vil brukes til å administrere alle pentest-forespørsler.'
+              text: '*Trusselmodellering-bestillinger listen er ikke konfigurert ennå.*\n\nTrykk på knappen nedenfor for å opprette en ny liste som vil brukes til å administrere alle trusselmodellering-forespørsler.'
             }
           },
           {
             type: 'section',
             text: {
               type: 'mrkdwn',
-              text: '✨ Listen vil automatisk opprettes med:\n• Prosjektnavn\n• Forespørsels-ID\n• Status\n• Hastegrad\n• Tildelt til\n• Forespurt av\n• Type pentest'
+              text: '✨ Listen vil automatisk opprettes med:\n• Prosjektnavn\n• Forespørsels-ID\n• Status\n• Prioritet\n• Tildelt til\n• Forespurt av\n• Type trusselmodellering'
             }
           },
           {
@@ -178,7 +178,7 @@ class SlackListsManager {
                   emoji: true
                 },
                 style: 'primary',
-                action_id: 'create_pentest_list'
+                action_id: 'create_threatmodeling_list'
               }
             ]
           }
@@ -199,7 +199,7 @@ class SlackListsManager {
 
       await this.client.chat.postMessage({
         channel: this.notificationChannelId,
-        text: '✅ Pentest-bestillinger liste opprettet!',
+        text: '✅ Trusselmodellering-bestillinger liste opprettet!',
         blocks: [
           {
             type: 'header',
@@ -213,7 +213,7 @@ class SlackListsManager {
             type: 'section',
             text: {
               type: 'mrkdwn',
-              text: '*Pentest-bestillinger* listen er nå klar! 🎉\n\nListen er delt med denne kanalen.'
+              text: '*Trusselmodellering-bestillinger* listen er nå klar! 🎉\n\nListen er delt med denne kanalen.'
             }
           },
           {
@@ -234,7 +234,7 @@ class SlackListsManager {
             type: 'section',
             text: {
               type: 'mrkdwn',
-              text: `\`\`\`ORDER_LIST_ID=${this.listId}\`\`\``
+              text: `\`\`\`THREAT_MODELING_LIST_ID=${this.listId}\`\`\``
             }
           },
           {
@@ -276,7 +276,7 @@ class SlackListsManager {
    * @throws {RequestProcessingError} When list creation fails
    */
   async createNewList() {
-    this.logger.info('Creating new Pentest-bestillinger list...');
+    this.logger.info('Creating new Trusselmodellering-bestillinger list...');
 
     const result = await this.apiService.createList({
       name: LIST_NAME,
@@ -421,9 +421,9 @@ class SlackListsManager {
             select: ['low']
           }
           : null,
-        this.pentestTypeColumnId
+        this.threatModelingTypeColumnId
           ? {
-            column_id: this.pentestTypeColumnId,
+            column_id: this.threatModelingTypeColumnId,
             select: ['other']
           }
           : null,
@@ -476,20 +476,20 @@ class SlackListsManager {
     try {
       await this.client.chat.postMessage({
         channel: this.notificationChannelId,
-        text: '📋 Pentest-bestillinger',
+        text: '📋 Trusselmodellering-bestillinger',
         blocks: [
           {
             type: 'header',
             text: {
               type: 'plain_text',
-              text: '📋 Pentest-bestillinger er klart!'
+              text: '📋 Trusselmodellering-bestillinger er klart!'
             }
           },
           {
             type: 'section',
             text: {
               type: 'mrkdwn',
-              text: 'Listen *Pentest-bestillinger* er nå aktiv og delt! Alle pentest-forespørsler vil automatisk vises her.'
+              text: 'Listen *Trusselmodellering-bestillinger* er nå aktiv og delt! Alle trusselmodellering-forespørsler vil automatisk vises her.'
             }
           },
           {
@@ -541,10 +541,10 @@ class SlackListsManager {
       });
     }
 
-    if (this.pentestTypeColumnId) {
+    if (this.threatModelingTypeColumnId) {
       fields.push({
-        column_id: this.pentestTypeColumnId,
-        select: [requestData.pentestType || 'other']
+        column_id: this.threatModelingTypeColumnId,
+        select: [requestData.threatModelingType || 'other']
       });
     }
 
@@ -690,7 +690,7 @@ class SlackListsManager {
         urgency: 'urgency',
         assignedTo: 'assignedTo',
         requestedBy: 'requestedBy',
-        pentestType: 'pentestType',
+        threatModelingType: 'threatModelingType',
         adminMessageTs: 'adminMessageTs'
       };
 

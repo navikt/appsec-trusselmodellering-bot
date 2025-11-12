@@ -1,4 +1,4 @@
-const LIST_NAME = 'Pentest-bestillinger';
+const LIST_NAME = 'Trusselmodellering-bestillinger';
 
 const STATUS_CHOICES = [
   { value: 'pending', label: 'Avventer', color: 'yellow' },
@@ -15,12 +15,9 @@ const URGENCY_CHOICES = [
   { value: 'unknown', label: 'Usikker', color: 'gray' }
 ];
 
-const PENTEST_TYPE_CHOICES = [
-  { value: 'web_app', label: 'Webapplikasjon', color: 'blue' },
-  { value: 'mobile_app', label: 'Mobilapplikasjon', color: 'cyan' },
-  { value: 'api', label: 'API', color: 'purple' },
-  { value: 'network', label: 'Nettverk', color: 'indigo' },
-  { value: 'cloud', label: 'Skyinfrastruktur', color: 'pink' },
+const THREAT_MODELING_TYPE_CHOICES = [
+  { value: 'standalone', label: 'Enkeltstående trusselmodellering', color: 'blue' },
+  { value: 'risk_assessment', label: 'Del av en risikovurdering av system', color: 'green' },
   { value: 'other', label: 'Annet', color: 'gray' }
 ];
 
@@ -67,11 +64,11 @@ const LIST_COLUMNS = Object.freeze({
       show_member_name: true
     }
   },
-  pentestType: {
-    key: 'pentest_type',
+  threatModelingType: {
+    key: 'threat_modeling_type',
     name: 'Type',
     type: 'select',
-    options: { format: 'single_select', choices: PENTEST_TYPE_CHOICES }
+    options: { format: 'single_select', choices: THREAT_MODELING_TYPE_CHOICES }
   },
   adminMessageTs: {
     key: 'admin_message_ts',
@@ -130,8 +127,8 @@ const URGENCY_LABELS = Object.freeze(
   }, {})
 );
 
-const PENTEST_TYPE_LABELS = Object.freeze(
-  PENTEST_TYPE_CHOICES.reduce((acc, choice) => {
+const THREAT_MODELING_TYPE_LABELS = Object.freeze(
+  THREAT_MODELING_TYPE_CHOICES.reduce((acc, choice) => {
     acc[choice.value] = choice.label;
     return acc;
   }, {})
@@ -146,11 +143,11 @@ module.exports = {
   COLUMN_KEYS,
   STATUS_CHOICES,
   URGENCY_CHOICES,
-  PENTEST_TYPE_CHOICES,
+  THREAT_MODELING_TYPE_CHOICES,
   REQUEST_STATUS,
   REQUEST_TO_LIST_STATUS,
   LIST_TO_REQUEST_STATUS,
   URGENCY_LABELS,
-  PENTEST_TYPE_LABELS,
+  THREAT_MODELING_TYPE_LABELS,
   DEFAULT_ADMIN_MESSAGE_PLACEHOLDER
 };

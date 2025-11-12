@@ -1,7 +1,7 @@
 {
-  "name": "pentest-order-slack-app",
+  "name": "threat-modeling-slack-app",
   "version": "1.0.0",
-  "description": "Slack app for managing pentest orders with approval workflow",
+  "description": "Slack app for managing threat modeling requests with automated integration to Trello.",
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
@@ -10,7 +10,7 @@
   "keywords": [
     "slack",
     "bolt",
-    "pentest",
+    "threat-modeling",
     "workflow"
   ],
   "author": "",
