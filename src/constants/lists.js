@@ -1,153 +1,34 @@
-const LIST_NAME = 'Trusselmodellering-bestillinger';
+// Constants for threat modeling modal form fields
+// These match the structure used in the threat modeling modal
 
-const STATUS_CHOICES = [
-  { value: 'pending', label: 'Avventer', color: 'yellow' },
-  { value: 'in_progress', label: 'Pågår', color: 'blue' },
-  { value: 'done', label: 'Ferdig', color: 'green' },
-  { value: 'rejected', label: 'Avvist', color: 'red' }
+const THREAT_MODELING_REASONS = [
+  { value: 'standalone', label: 'Enkeltstående trusselmodellering' },
+  { value: 'risk_assessment_part', label: 'Del av en risikovurdering av system' }
 ];
 
-const URGENCY_CHOICES = [
-  { value: 'critical', label: 'Kritisk', color: 'red' },
-  { value: 'high', label: 'Høy', color: 'orange' },
-  { value: 'medium', label: 'Middels', color: 'yellow' },
-  { value: 'low', label: 'Lav', color: 'green' },
-  { value: 'unknown', label: 'Usikker', color: 'gray' }
-];
-
-const THREAT_MODELING_TYPE_CHOICES = [
-  { value: 'standalone', label: 'Enkeltstående trusselmodellering', color: 'blue' },
-  { value: 'risk_assessment', label: 'Del av en risikovurdering av system', color: 'green' },
-  { value: 'other', label: 'Annet', color: 'gray' }
-];
-
-const LIST_COLUMNS = Object.freeze({
-  projectName: {
-    key: 'project_name',
-    name: 'Prosjektnavn',
-    type: 'text',
-    is_primary_column: true
-  },
-  requestId: {
-    key: 'request_id',
-    name: 'Forespørsels-ID',
-    type: 'text'
-  },
-  status: {
-    key: 'status',
-    name: 'Status',
-    type: 'select',
-    options: { format: 'single_select', choices: STATUS_CHOICES }
-  },
-  urgency: {
-    key: 'urgency',
-    name: 'Hastegrad',
-    type: 'select',
-    options: { format: 'single_select', choices: URGENCY_CHOICES }
-  },
-  assignedTo: {
-    key: 'assigned_to',
-    name: 'Tildelt til',
-    type: 'user',
-    options: {
-      format: 'multi_entity',
-      show_member_name: true,
-      notify_users: false
-    }
-  },
-  requestedBy: {
-    key: 'requested_by',
-    name: 'Forespurt av',
-    type: 'user',
-    options: {
-      format: 'single_entity',
-      show_member_name: true
-    }
-  },
-  threatModelingType: {
-    key: 'threat_modeling_type',
-    name: 'Type',
-    type: 'select',
-    options: { format: 'single_select', choices: THREAT_MODELING_TYPE_CHOICES }
-  },
-  adminMessageTs: {
-    key: 'admin_message_ts',
-    name: 'Admin Msg TS',
-    type: 'text'
-  }
+// Modal form field identifiers
+const MODAL_FIELDS = Object.freeze({
+  PROJECT_NAME: 'project_name',
+  TEAM_NAME: 'team_name', 
+  SYSTEM_DESCRIPTION: 'system_description',
+  THREAT_MODELING_REASON: 'threat_modeling_reason',
+  PREFERRED_TIMEFRAME: 'preferred_timeframe', 
 });
 
-const LIST_SCHEMA = Object.freeze(
-  Object.values(LIST_COLUMNS).map(({ key, name, type, options, is_primary_column }) => ({
-    key,
-    name,
-    type,
-    ...(is_primary_column ? { is_primary_column: true } : {}),
-    ...(options ? { options } : {})
-  }))
-);
-
-const COLUMN_KEYS = Object.freeze(
-  Object.fromEntries(Object.entries(LIST_COLUMNS).map(([alias, definition]) => [alias, definition.key]))
-);
-
-const REQUEST_STATUS = Object.freeze({
-  PENDING: 'pending',
-  APPROVED: 'approved',
-  REJECTED: 'rejected',
-  IN_PROGRESS: 'in_progress',
-  COMPLETED: 'completed',
-  DONE: 'done'
+// Modal callback identifiers
+const MODAL_CALLBACKS = Object.freeze({
+  THREAT_MODELING_REQUEST: 'threatmodeling_request_modal'
 });
 
-const REQUEST_TO_LIST_STATUS = Object.freeze({
-  pending: 'pending',
-  approved: 'pending',
-  rejected: 'rejected',
-  completed: 'done',
-  done: 'done',
-  in_progress: 'in_progress',
-  complete: 'done',
-  reporting: 'in_progress',
-  review: 'in_progress',
-  on_hold: 'pending'
-});
-
-const LIST_TO_REQUEST_STATUS = Object.freeze({
-  pending: 'pending',
-  in_progress: 'in_progress',
-  done: 'completed',
-  rejected: 'rejected'
-});
-
-const URGENCY_LABELS = Object.freeze(
-  URGENCY_CHOICES.reduce((acc, choice) => {
-    acc[choice.value] = choice.label;
-    return acc;
-  }, {})
-);
-
-const THREAT_MODELING_TYPE_LABELS = Object.freeze(
-  THREAT_MODELING_TYPE_CHOICES.reduce((acc, choice) => {
-    acc[choice.value] = choice.label;
-    return acc;
-  }, {})
-);
-
-const DEFAULT_ADMIN_MESSAGE_PLACEHOLDER = '-';
+// Helper function to get label for threat modeling reason
+const getThreatModelingReasonLabel = (value) => {
+  const reason = THREAT_MODELING_REASONS.find(r => r.value === value);
+  return reason ? reason.label : value;
+};
 
 module.exports = {
-  LIST_NAME,
-  LIST_COLUMNS,
-  LIST_SCHEMA,
-  COLUMN_KEYS,
-  STATUS_CHOICES,
-  URGENCY_CHOICES,
-  THREAT_MODELING_TYPE_CHOICES,
-  REQUEST_STATUS,
-  REQUEST_TO_LIST_STATUS,
-  LIST_TO_REQUEST_STATUS,
-  URGENCY_LABELS,
-  THREAT_MODELING_TYPE_LABELS,
-  DEFAULT_ADMIN_MESSAGE_PLACEHOLDER
+  THREAT_MODELING_REASONS,
+  MODAL_FIELDS,
+  MODAL_CALLBACKS,
+  getThreatModelingReasonLabel
 };
