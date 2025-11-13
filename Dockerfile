@@ -4,7 +4,7 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm ci --omit=dev
 
-FROM europe-north1-docker.pkg.dev/cgr-nav/pull-through/nav.no/node:22-slim
+FROM europe-north1-docker.pkg.dev/cgr-nav/pull-through/nav.no/node:22-dev
 WORKDIR /app
 
 ENV NODE_ENV=production \
