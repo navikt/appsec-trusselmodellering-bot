@@ -18,33 +18,16 @@ const getThreatModelingRequestModal = () => ({
       type: 'section',
       text: {
         type: 'mrkdwn',
-        text: `*Bestill trusselmodellering*
-
-Dette skjemaet brukes for å bestille trusselmodellering av systemer og applikasjoner.
-
+        text: `*Bestill Trusselmodellering*
 *Hva skjer etter at du sender inn?*
 1. Vi oppretter automatisk en Trello-sak for oppfølging
-2. Sikkerhetsteamet blir varslet og tar kontakt for å avtale tidspunkt
-3. Vi ønsker at hele teamet deltar i trusselmodelleringen, ikke bare utviklere
+2. AppSec blir varslet og tar kontakt for å avtale tidspunkt
 
-*Viktig:* Ikke skriv sensitiv informasjon som passord, personopplysninger eller forretningshemmeligheter i dette skjemaet.`
+_Vi setter pris på at både utviklere, produkteiere, designere og andre relevante teammedlemmer deltar i trusselmodelleringen._`
       }
     },
     {
-      type: 'input',
-      block_id: 'project_name',
-      element: {
-        type: 'plain_text_input',
-        action_id: 'project_name_input',
-        placeholder: {
-          type: 'plain_text',
-          text: 'Skriv inn system- eller applikasjonsnavn'
-        }
-      },
-      label: {
-        type: 'plain_text',
-        text: 'System/applikasjonsnavn'
-      }
+      type: 'divider'
     },
     {
       type: 'input',
@@ -71,7 +54,7 @@ Dette skjemaet brukes for å bestille trusselmodellering av systemer og applikas
         multiline: true,
         placeholder: {
           type: 'plain_text',
-          text: 'Kort beskrivelse av systemet/applikasjonen, hva den gjør, hvilke data den håndterer, osv.'
+          text: 'Kort beskrivelse av systemet/applikasjonen'
         }
       },
       label: {
@@ -87,7 +70,7 @@ Dette skjemaet brukes for å bestille trusselmodellering av systemer og applikas
         action_id: 'threat_modeling_reason_select',
         placeholder: {
           type: 'plain_text',
-          text: 'Velg årsak for trusselmodellering'
+          text: 'Velg årsak'
         },
         options: [
           {
@@ -95,14 +78,14 @@ Dette skjemaet brukes for å bestille trusselmodellering av systemer og applikas
             value: 'standalone'
           },
           {
-            text: { type: 'plain_text', text: 'Del av en risikovurdering av system' },
+            text: { type: 'plain_text', text: 'Del av risikovurderingsprosess' },
             value: 'risk_assessment_part'
           }
         ]
       },
       label: {
         type: 'plain_text',
-        text: 'Formål med trusselmodellering'
+        text: 'Formål'
       }
     },
     {
@@ -113,45 +96,14 @@ Dette skjemaet brukes for å bestille trusselmodellering av systemer og applikas
         action_id: 'preferred_timeframe_input',
         placeholder: {
           type: 'plain_text',
-          text: 'F.eks. "i løpet av januar", "før lansering i mars", "fleksibelt", osv.'
+          text: 'F.eks. "i løpet av januar", "fleksibelt", osv.'
         }
       },
       label: {
         type: 'plain_text',
         text: 'Ønsket tidsperiode'
       },
-      optional: true,
-      hint: {
-        type: 'plain_text',
-        text: 'Gi en indikasjon på når det passer best for teamet'
-      }
-    },
-    {
-      type: 'input',
-      block_id: 'additional_info',
-      element: {
-        type: 'plain_text_input',
-        action_id: 'additional_info_input',
-        multiline: true,
-        placeholder: {
-          type: 'plain_text',
-          text: 'Del gjerne annen relevant informasjon eller spørsmål'
-        }
-      },
-      label: {
-        type: 'plain_text',
-        text: 'Tilleggsinformasjon'
-      },
       optional: true
-    },
-    {
-      type: 'context',
-      elements: [
-        {
-          type: 'mrkdwn',
-          text: '_Når forespørselen er sendt, opprettes det automatisk en Trello-sak og sikkerhetsteamet blir varslet._'
-        }
-      ]
     }
   ]
 });

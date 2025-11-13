@@ -1,18 +1,16 @@
-FROM node:20-alpine AS deps
+FROM europe-north1-docker.pkg.dev/cgr-nav/pull-through/nav.no/node:22-dev AS builder
 WORKDIR /app
 
 COPY package*.json ./
 RUN npm ci --omit=dev
 
-FROM node:20-alpine AS runner
+FROM europe-north1-docker.pkg.dev/cgr-nav/pull-through/nav.no/node:22-slim
 WORKDIR /app
 
 ENV NODE_ENV=production \
     PORT=3000
 
-RUN apk add --no-cache curl
-
-COPY --from=deps /app/node_modules ./node_modules
+COPY --from=builder /app/node_modules ./node_modules
 COPY --chown=node:node . .
 
 USER node

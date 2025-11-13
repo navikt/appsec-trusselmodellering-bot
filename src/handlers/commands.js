@@ -2,6 +2,7 @@ const logger = require('../logger');
 const { getThreatModelingRequestModal } = require('../modals');
 const { buildThreatModelingNotificationMessage } = require('../messages');
 const { getThreatModelingReasonLabel } = require('../constants/lists');
+const TrelloService = require('../services/trelloService');
 
 module.exports = function registerCommands(app, config = {}) {
   const notificationChannelId = config.notificationChannelId || process.env.NOTIFICATION_CHANNEL_ID;
@@ -60,9 +61,26 @@ module.exports = function registerCommands(app, config = {}) {
     };
 
     try {
-      // TODO: Create Trello card here - will be implemented later
-      // const trelloUrl = await createTrelloCard(requestData);
-      const trelloUrl = null; // Placeholder until Trello integration is implemented
+      // Create Trello card
+      const trelloService = new TrelloService();
+      const cardName = `Trusselmodellering bestilt av ${teamName}`;
+      const cardDescription = `**Team:** ${teamName}
+
+      **System:** ${requestData.projectName || 'Ikke oppgitt'}
+
+      **Beskrivelse:** ${systemDescription}
+
+      **Formål:** ${threatModelingReasonText}
+
+      **Ønsket tidsperiode:** ${preferredTimeframe || 'Ikke oppgitt'}
+
+      **Forespurt av:** <@${user.id}>
+      **Forespørsels-ID:** ${requestId}
+      **Opprettet:** ${new Date().toLocaleString('no-NO', { timeZone: 'Europe/Oslo' })}`;
+
+      const trelloCard = await trelloService.createCard(cardName, cardDescription);
+      const trelloUrl = trelloCard.shortUrl;
+      logger.info(`Trello card created for request ${requestId}: ${trelloUrl}`);
 
       // Post notification to team channel
       logger.slack('Posting threat modeling request to notification channel', { requestId, channel: notificationChannelId });
