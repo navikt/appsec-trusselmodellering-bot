@@ -17,4 +17,5 @@ USER node
 
 EXPOSE 3000
 
-CMD ["node", "app.js"]
+ENTRYPOINT ["node"]
+CMD ["app.js"]
