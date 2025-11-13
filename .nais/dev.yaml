@@ -28,6 +28,8 @@ spec:
         - host: slack.com
         - host: api.slack.com
         - host: wss-primary.slack.com
+        - host: api.trello.com
+        - host: trello.com
   env:
     - name: PORT
       value: "3000"
