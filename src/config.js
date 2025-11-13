@@ -6,7 +6,8 @@ const REQUIRED_ENV_VARS = [
 	'SOCKET_MODE_TOKEN',
 	'NOTIFICATION_CHANNEL_ID',
 	'TRELLO_API_KEY',
-	'TRELLO_API_TOKEN'
+	'TRELLO_API_TOKEN',
+	'TRELLO_LIST_ID'
 ];
 
 const missing = REQUIRED_ENV_VARS.filter((key) => !process.env[key]);
@@ -33,6 +34,7 @@ const config = {
 	trello: {
 		apiKey: process.env.TRELLO_API_KEY,
 		apiToken: process.env.TRELLO_API_TOKEN,
+		listId: process.env.TRELLO_LIST_ID
 	}
 };
 

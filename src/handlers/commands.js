@@ -8,19 +8,25 @@ module.exports = function registerCommands(app, config = {}) {
   const notificationChannelId = config.notificationChannelId || process.env.NOTIFICATION_CHANNEL_ID;
 
   const openThreatModelingModal = async ({ command, ack, client, commandName }) => {
-    await ack();
-    logger.command(commandName || '/bestill-trusselmodellering', command.user_id, command.channel_id);
-
     try {
+      await ack();
+      logger.info(`Command received: ${commandName || '/bestill-trusselmodellering'}`, { 
+        user: command.user_id, 
+        channel: command.channel_id,
+        trigger_id: command.trigger_id 
+      });
+
       await client.views.open({
         trigger_id: command.trigger_id,
         view: getThreatModelingRequestModal()
       });
+      
+      logger.info('Modal opened successfully');
     } catch (error) {
-      logger.error('Error opening modal:', error);
+      logger.error('Error in command handler:', error);
       try {
         await client.chat.postMessage({
-          channel: command.user_id || command.user_id,
+          channel: command.user_id,
           text: `Beklager, det oppstod en feil da modalen skulle åpnes. Prøv igjen senere.`
         });
       } catch (dmErr) {
@@ -98,32 +104,10 @@ module.exports = function registerCommands(app, config = {}) {
       });
       logger.success(`Threat modeling request posted to notification channel`, { requestId, ts: result.ts });
 
-      // Confirm to user that request is processed
-      await client.chat.postMessage({
-        channel: user.id,
-        text: `Din trusselmodellering-forespørsel er mottatt! ID: ${requestId}`,
-        blocks: [
-          {
-            type: 'section',
-            text: {
-              type: 'mrkdwn',
-              text: `✅ *Takk for din trusselmodellering-forespørsel!*\n\n*Forespørsels-ID:* ${requestId}\n*Prosjekt:* ${projectName}\n\nForespørselen din er mottatt og vil bli behandlet av AppSec.`
-            }
-          }
-        ]
-      });
+      logger.success(`Threat modeling request processed successfully for user ${user.id}`, { requestId });
 
     } catch (error) {
       logger.error('Error processing threat modeling request:', error);
-      
-      try {
-        await client.chat.postMessage({
-          channel: user.id,
-          text: `Beklager, det oppstod en feil under behandling av trusselmodellering-forespørselen din. Vennligst prøv igjen eller kontakt teamet direkte.`
-        });
-      } catch (dmError) {
-        logger.error('Error sending DM to user:', dmError);
-      }
     }
   });
 };

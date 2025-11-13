@@ -19,6 +19,8 @@ class TrelloService {
       desc: description
     };
 
+    logger.debug('Creating Trello card with:', { url, listId: this.listId, name, hasToken: !!this.apiToken });
+
     try {
       const response = await fetch(url, {
         method: 'POST',
