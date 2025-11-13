@@ -3,9 +3,9 @@ apiVersion: nais.io/v1alpha1
 kind: Application
 metadata:
   labels:
-    team: saape-nais
+    team: appsec
   name: saape-pentest-slackbot
-  namespace: saape-nais
+  namespace: appsec
 spec:
   image: {{ image }}
   port: 3000
@@ -22,8 +22,6 @@ spec:
     requests:
       cpu: 10m
       memory: 128Mi
-  ingresses:
-    - https://saape-pentest-slackbot.ekstern.dev.nav.no
   accessPolicy:
     outbound:
       external:
@@ -34,4 +32,4 @@ spec:
     - name: PORT
       value: "3000"
   envFrom:
-    - secret: saape-pentest-slackbot-secrets
+    - secret: appsec-trusselmodellering-bot-secrets
