@@ -76,7 +76,7 @@ module.exports = function registerCommands(app, config = {}) {
 
       **Ønsket tidsperiode:** ${preferredTimeframe || 'Ikke oppgitt'}
 
-      **Forespurt av:** ${user.email}
+      **Forespurt av:** ${user.id} (Denne er ulesbar i Trello, men brukernavn står i Slack-posten)
       **Forespørsels-ID:** ${requestId}
       **Opprettet:** ${new Date().toLocaleString('no-NO', { timeZone: 'Europe/Oslo' })}`;
 
