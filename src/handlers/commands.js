@@ -67,12 +67,23 @@ module.exports = function registerCommands(app, config = {}) {
     };
 
     try {
+      // Get user information for better display
+      let userDisplayName = user.id;
+      try {
+        const userInfo = await client.users.info({ user: user.id });
+        if (userInfo.ok && userInfo.user) {
+          userDisplayName = userInfo.user.real_name || userInfo.user.display_name || userInfo.user.name || user.id;
+        }
+      } catch (userInfoError) {
+        logger.warn(`Failed to get user info for ${user.id}:`, userInfoError);
+      }
+
       // Create Trello card
       const trelloService = new TrelloService();
       const cardName = `Trusselmodellering bestilt av ${teamName}`;
       const cardDescription = `**Team:** ${teamName}
 
-      **System:** ${requestData.projectName || 'Ikke oppgitt'}
+      **System:** ${projectName || 'Ikke oppgitt'}
 
       **Beskrivelse:** ${systemDescription}
 
@@ -80,7 +91,7 @@ module.exports = function registerCommands(app, config = {}) {
 
       **Ønsket tidsperiode:** ${preferredTimeframe || 'Ikke oppgitt'}
 
-      **Forespurt av:** <@${user.id}>
+      **Forespurt av:** ${userDisplayName}
       **Forespørsels-ID:** ${requestId}
       **Opprettet:** ${new Date().toLocaleString('no-NO', { timeZone: 'Europe/Oslo' })}`;
 
