@@ -13,11 +13,9 @@ class ThreatModelingStore {
   // Temporarily cache threat modeling request data during processing
   async cacheRequestData(requestId, data) {
     logger.debug(`Caching threat modeling request: ${requestId}`, { 
-      projectName: data.projectName 
     });
 
     this._updateCache(requestId, {
-      projectName: data.projectName || '',
       systemDescription: data.systemDescription || '',
       threatModelingType: data.threatModelingType || '',
       priority: data.priority || '',

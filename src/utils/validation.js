@@ -94,7 +94,7 @@ const validateRequestData = (requestData) => {
     throw new ValidationError('Request data must be an object', 'requestData', requestData);
   }
   
-  const requiredFields = ['projectName', 'requestedBy'];
+  const requiredFields = ['requestedBy'];
   
   requiredFields.forEach(field => {
     if (!requestData[field] || typeof requestData[field] !== 'string') {
@@ -141,23 +141,6 @@ const safeValidate = (validationFn, value, ...args) => {
   }
 };
 
-/**
- * Validates and sanitizes a project name for channel creation
- * @param {string} projectName - The project name to sanitize
- * @returns {string} Sanitized project name
- */
-const sanitizeProjectName = (projectName) => {
-  if (!projectName || typeof projectName !== 'string') {
-    return 'prosjekt';
-  }
-  
-  return projectName
-    .toLowerCase()
-    .replace(/[^a-z0-9-]/g, '-')
-    .replace(/-+/g, '-')
-    .replace(/^-|-$/g, '')
-    .substring(0, 40) || 'prosjekt';
-};
 
 module.exports = {
   ValidationError,
@@ -166,5 +149,4 @@ module.exports = {
   validateUserIdArray,
   validateRequestData,
   safeValidate,
-  sanitizeProjectName
 };

@@ -54,7 +54,6 @@ module.exports = function registerCommands(app, config = {}) {
     logger.info(`New threat modeling request initiated: ${requestId} by ${user.id}`);
 
     const requestData = {
-      projectName,
       teamName,
       systemDescription,
       threatModelingReason,
@@ -70,8 +69,6 @@ module.exports = function registerCommands(app, config = {}) {
       const trelloService = new TrelloService();
       const cardName = `Trusselmodellering bestilt av ${teamName}`;
       const cardDescription = `**Team:** ${teamName}
-
-      **System:** ${requestData.projectName || 'Ikke oppgitt'}
 
       **Beskrivelse:** ${systemDescription}
 
