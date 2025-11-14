@@ -1,5 +1,4 @@
 const buildThreatModelingNotificationMessage = (requestId, user, requestData, trelloUrl = null) => ({
-  text: `Ny trusselmodellering-forespørsel: ${requestData.projectName || 'Uten navn'}`,
   blocks: [
     { type: 'header', text: { type: 'plain_text', text: '🛡️ Ny trusselmodellering-forespørsel', emoji: true } },
     {
@@ -11,7 +10,6 @@ const buildThreatModelingNotificationMessage = (requestId, user, requestData, tr
     { type: 'divider' },
     {
       type: 'section', fields: [
-        { type: 'mrkdwn', text: `*System/applikasjon:*\n${requestData.projectName || 'Uten navn'}` },
         { type: 'mrkdwn', text: `*Team:*\n${requestData.teamName || 'Ikke oppgitt'}` }
       ]
     },

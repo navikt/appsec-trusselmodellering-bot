@@ -44,7 +44,6 @@ module.exports = function registerCommands(app, config = {}) {
     const values = view.state.values;
     const user = body.user;
 
-    const projectName = values?.project_name?.project_name_input?.value?.trim() || 'Uten navn';
     const teamName = values?.team_name?.team_name_input?.value?.trim() || 'Ikke oppgitt';
     const systemDescription = values?.system_description?.system_description_input?.value?.trim() || 'Ikke oppgitt';
     const threatModelingReason = values?.threat_modeling_reason?.threat_modeling_reason_select?.selected_option?.value || 'standalone';
@@ -67,23 +66,12 @@ module.exports = function registerCommands(app, config = {}) {
     };
 
     try {
-      // Get user information for better display
-      let userDisplayName = user.id;
-      try {
-        const userInfo = await client.users.info({ user: user.id });
-        if (userInfo.ok && userInfo.user) {
-          userDisplayName = userInfo.user.real_name || userInfo.user.display_name || userInfo.user.name || user.id;
-        }
-      } catch (userInfoError) {
-        logger.warn(`Failed to get user info for ${user.id}:`, userInfoError);
-      }
-
       // Create Trello card
       const trelloService = new TrelloService();
       const cardName = `Trusselmodellering bestilt av ${teamName}`;
       const cardDescription = `**Team:** ${teamName}
 
-      **System:** ${projectName || 'Ikke oppgitt'}
+      **System:** ${requestData.projectName || 'Ikke oppgitt'}
 
       **Beskrivelse:** ${systemDescription}
 
@@ -91,7 +79,7 @@ module.exports = function registerCommands(app, config = {}) {
 
       **Ønsket tidsperiode:** ${preferredTimeframe || 'Ikke oppgitt'}
 
-      **Forespurt av:** ${userDisplayName}
+      **Forespurt av:** ${user.email}
       **Forespørsels-ID:** ${requestId}
       **Opprettet:** ${new Date().toLocaleString('no-NO', { timeZone: 'Europe/Oslo' })}`;
 
