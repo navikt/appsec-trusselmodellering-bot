@@ -68,17 +68,17 @@ module.exports = function registerCommands(app, config = {}) {
       // Create Trello card
       const trelloService = new TrelloService();
       const cardName = `Trusselmodellering bestilt av ${teamName}`;
-      const cardDescription = `**Team:** ${teamName}
+      const cardDescription = `*Team:* ${teamName}
 
-      **Beskrivelse:** ${systemDescription}
+      *Beskrivelse:* ${systemDescription}
 
-      **Formål:** ${threatModelingReasonText}
+      *Formål:* ${threatModelingReasonText}
 
-      **Ønsket tidsperiode:** ${preferredTimeframe || 'Ikke oppgitt'}
+      *Ønsket tidsperiode:* ${preferredTimeframe || 'Ikke oppgitt'}
 
-      **Forespurt av:** ${user.id} (Denne er ulesbar i Trello, men brukernavn står i Slack-posten)
-      **Forespørsels-ID:** ${requestId}
-      **Opprettet:** ${new Date().toLocaleString('no-NO', { timeZone: 'Europe/Oslo' })}`;
+      *Forespurt av:* ${user.id} (Denne er ulesbar i Trello, men brukernavn står i Slack-posten)
+      *Forespørsels-ID:* ${requestId}
+      *Opprettet:* ${new Date().toLocaleString('no-NO', { timeZone: 'Europe/Oslo' })}`;
 
       const trelloCard = await trelloService.createCard(cardName, cardDescription);
       const trelloUrl = trelloCard.shortUrl;
