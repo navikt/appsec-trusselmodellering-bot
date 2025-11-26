@@ -5,7 +5,7 @@ const buildThreatModelingNotificationMessage = (requestId, user, requestData, tr
       type: 'section', fields: [
         { type: 'mrkdwn', text: `*Forespurt av:* <@${user.id}>` },
         { type: 'mrkdwn', text: `*Team:* ${requestData.teamName || 'Ikke oppgitt'}` },
-        .. .(requestData.preferredTimeframe ? [{ type: 'mrkdwn', text: `*Ønsket tidsperiode:* ${requestData.preferredTimeframe}` }] : []),
+        ...(requestData.preferredTimeframe ? [{ type: 'mrkdwn', text: `*Ønsket tidsperiode:* ${requestData.preferredTimeframe}` }] : []),
         ...(trelloUrl ? [{ type: 'mrkdwn', text: `*Trello-kort:* <${trelloUrl}|Se Trello-kort>` }] : [])
       ]
     }
