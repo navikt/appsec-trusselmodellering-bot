@@ -3,35 +3,11 @@ const buildThreatModelingNotificationMessage = (requestId, user, requestData, tr
     { type: 'header', text: { type: 'plain_text', text: '🛡️ Ny trusselmodellering-forespørsel', emoji: true } },
     {
       type: 'section', fields: [
-        { type: 'mrkdwn', text: `*Forespørsels-ID:*\n${requestId}` },
-        { type: 'mrkdwn', text: `*Forespurt av:*\n<@${user.id}>` }
+        { type: 'mrkdwn', text: `*Forespurt av:* <@${user.id}>` },
+        { type: 'mrkdwn', text: `*Team:* ${requestData.teamName || 'Ikke oppgitt'}` },
+        .. .(requestData.preferredTimeframe ? [{ type: 'mrkdwn', text: `*Ønsket tidsperiode:* ${requestData.preferredTimeframe}` }] : []),
+        ...(trelloUrl ? [{ type: 'mrkdwn', text: `*Trello-kort:* <${trelloUrl}|Se Trello-kort>` }] : [])
       ]
-    },
-    { type: 'divider' },
-    {
-      type: 'section', fields: [
-        { type: 'mrkdwn', text: `*Team:*\n${requestData.teamName || 'Ikke oppgitt'}` }
-      ]
-    },
-    { type: 'section', text: { type: 'mrkdwn', text: `*Systembeskrivelse:*\n${requestData.systemDescription || 'Ikke oppgitt'}` } },
-    { type: 'section', text: { type: 'mrkdwn', text: `*Formål med trusselmodellering:*\n${requestData.threatModelingReasonText || 'Ikke oppgitt'}` } },
-    ...(requestData.preferredTimeframe ? [
-      { type: 'section', text: { type: 'mrkdwn', text: `*Ønsket tidsperiode:*\n${requestData.preferredTimeframe}` } }
-    ] : []),
-    ...(trelloUrl ? [
-      { type: 'divider' },
-      { type: 'section', text: { type: 'mrkdwn', text: `*Trello-kort:*\n<${trelloUrl}|Se Trello-kort for oppfølging>` } }
-    ] : []),
-    { type: 'divider' },
-    {
-      type: 'context',
-      elements: [{
-        type: 'mrkdwn',
-        text: `Opprettet: ${new Date(requestData.requestedAt || Date.now()).toLocaleString('no-NO', { 
-          year: 'numeric', month: '2-digit', day: '2-digit', 
-          hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Oslo' 
-        })}`
-      }]
     }
   ]
 });
