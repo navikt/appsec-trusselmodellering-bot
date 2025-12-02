@@ -14,6 +14,8 @@ jobs:
       id-token: write
     steps:
       - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
       - uses: nais/docker-build-push@v0
         id: docker-push
         with:
@@ -22,4 +24,4 @@ jobs:
         env:
           CLUSTER: prod-gcp
           RESOURCE: .nais/nais.yaml
-          IMAGE: ${{ needs.build-and-push.outputs.image }}
+          IMAGE: ${{ steps.docker-push.outputs.image }}
