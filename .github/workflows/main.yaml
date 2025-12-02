@@ -13,30 +13,13 @@ jobs:
       contents: read
       id-token: write
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: nais/docker-build-push@v0
         id: docker-push
         with:
           team: appsec
-          project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
-          identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
-          dockerfile: Dockerfile
-          docker_context: .
-    outputs:
-      image: ${{ steps.docker-push.outputs.image }}
-      telemetry: ${{ steps.docker-push.outputs.telemetry }}
-
-  deploy-prod:
-    needs: build-and-push
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      id-token: write
-    steps:
-      - uses: actions/checkout@v5
       - uses: nais/deploy/actions/deploy@v2
         env:
           CLUSTER: prod-gcp
           RESOURCE: .nais/nais.yaml
           IMAGE: ${{ needs.build-and-push.outputs.image }}
-          TELEMETRY: ${{ needs.build-and-push.outputs.telemetry }}
