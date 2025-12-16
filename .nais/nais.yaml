@@ -18,10 +18,10 @@ spec:
     path: /internal/is_alive
   resources:
     limits:
-      memory: 512Mi
+      memory: 64Mi
     requests:
       cpu: 10m
-      memory: 128Mi
+      memory: 64Mi
   accessPolicy:
     outbound:
       external:
