@@ -20,7 +20,7 @@
     "@slack/socket-mode": "^2.0.5",
     "dotenv": "^17.2.3",
     "finity": "^0.5.4",
-    "pg": "^8.17.1",
+    "pg": "^8.17.2",
     "ws": "^8.19.0"
   },
   "devDependencies": {
