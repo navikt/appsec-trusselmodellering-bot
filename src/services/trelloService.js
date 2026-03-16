@@ -6,6 +6,7 @@ class TrelloService {
     this.apiKey = config.trello.apiKey;
     this.apiToken = config.trello.apiToken;
     this.listId = config.trello.listId;
+    this.labelId = config.trello.labelId;
   }
 
   async createCard(name, description) {
@@ -15,6 +16,7 @@ class TrelloService {
       key: this.apiKey,
       token: this.apiToken,
       idList: this.listId,
+      idLabels: this.labelId,
       name: name,
       desc: description
     };
