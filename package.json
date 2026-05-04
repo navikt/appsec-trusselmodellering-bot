@@ -16,7 +16,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@slack/bolt": "^4.7.0",
+    "@slack/bolt": "^4.7.1",
     "@slack/socket-mode": "^2.0.5",
     "dotenv": "^17.4.2",
     "finity": "^0.5.4",
