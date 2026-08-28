@@ -16,12 +16,12 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@slack/bolt": "^4.7.3",
-    "@slack/socket-mode": "^2.0.5",
+    "@slack/bolt": "^5.0.0",
+    "@slack/socket-mode": "^3.0.0",
     "dotenv": "^17.4.2",
     "finity": "^0.5.4",
-    "pg": "^8.21.0",
-    "ws": "^8.21.0"
+    "pg": "^8.23.0",
+    "ws": "^8.21.3"
   },
   "devDependencies": {
     "nodemon": "^3.1.14"
