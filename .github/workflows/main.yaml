@@ -20,7 +20,7 @@ jobs:
         id: docker-push
         with:
           team: appsec
-      - uses: nais/deploy/actions/deploy@v2
+      - uses: nais/deploy/actions/deploy@v3
         env:
           CLUSTER: prod-gcp
           RESOURCE: .nais/nais.yaml
