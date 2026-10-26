@@ -18,7 +18,7 @@
   "dependencies": {
     "@slack/bolt": "^5.1.0",
     "@slack/socket-mode": "^3.1.0",
-    "dotenv": "^18.0.7",
+    "dotenv": "^18.0.8",
     "finity": "^0.5.4",
     "pg": "^8.23.1",
     "ws": "^8.22.0"
